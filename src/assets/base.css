@@ -1,0 +1,69 @@
+:root {
+  --green: #42b883;
+  --white-soft: #e2e8f0;
+  --white: #ffffff;
+  --text-dark: #2d3748;
+  --white-light: #f7fafc;
+  --black-30: rgba(0, 0, 0, 0.3);
+  --black-10: rgba(0, 0, 0, 0.1);
+
+  --alert: red;
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background-soft: var(--white-soft);
+  --color-background-light: var(--white-light);
+  --color-background: var(--white);
+  --color-background-btn: var(--white);
+
+  --color-border-btn: var(--white-soft);
+  --color-border: var(--green);
+  --color-hover: var(--green);
+
+  --color-shadow: var(--black-30);
+  --color-text: var(--text-dark);
+  --color-text-active: var(--white);
+  --color-text-opacity-30: var(--black-30);
+  --color-text-opacity-10: var(--black-10);
+  --gap: 16px;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  
+} */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
