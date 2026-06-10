@@ -9,10 +9,9 @@ export interface Task {
 }
 
 export type Stats = {
-  total: number
-  completed: number
-  active: number
-  progress: number
+  label: string
+  count: number
+  bar?: boolean
 }
 
 export type FilterOption = {

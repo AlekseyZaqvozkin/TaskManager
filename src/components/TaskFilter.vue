@@ -40,7 +40,7 @@ const handleFilter = (e: string) => {
     </div>
 
     <div class="filter__sort">
-      <select v-model="sortBy" @change="handleSort" class="filter__select tab btn">
+      <select v-model="sortBy" name="sortBy" @change="handleSort" class="filter__select tab btn">
         <option value="date">По дате</option>
         <option value="completedDate">Срок выполнения</option>
         <option value="title">По названию</option>
@@ -69,8 +69,8 @@ const handleFilter = (e: string) => {
 
   &__tab {
     padding: 8px 16px;
-    background: var(--color-background);
-    border: 1px solid var(--color-background-soft);
+    background: var(--color-background-btn);
+    border: 1px solid var(--color-border-btn);
     border-radius: 8px;
     cursor: pointer;
     transition:

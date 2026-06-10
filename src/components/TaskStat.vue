@@ -2,41 +2,20 @@
 import type { Stats } from '@/types/global'
 
 defineProps<{
-  stats: Stats
+  stats: Stats[]
 }>()
 </script>
 
 <template>
   <div class="stat">
-    <div class="stat__tabs tab">
-      <!-- <div class="stat__icon">Iii</div> -->
-
-      <div class="stat__label">Всего</div>
-      <div class="stat__count">{{ stats.total }}</div>
-    </div>
-
-    <div class="stat__tabs tab">
-      <!-- <div class="stat__icon">Iii</div> -->
-
-      <div class="stat__label">Выполнено</div>
-      <div class="stat__count">{{ stats.completed }}</div>
-    </div>
-
-    <div class="stat__tabs tab">
-      <!-- <div class="stat__icon">Iii</div> -->
-
-      <div class="stat__label">Активных</div>
-      <div class="stat__count">{{ stats.active }}</div>
-    </div>
-
-    <div class="stat__tabs tab">
-      <!-- <div class="stat__icon">Iii</div> -->
-
-      <div class="stat__label">Прогресс</div>
-      <!-- <div class="stat__value">{{ stats.progress }}</div> -->
-      <div class="stat__bar">
-        <div class="stat__bar--fill" :style="{ height: `${stats.progress}%` }"></div>
-      </div>
+    <div v-for="stat in stats" :key="stat.label" class="tab stat__tabs">
+      <p class="stat__label">
+        {{ stat.label }}
+      </p>
+      <span class="stat__count">
+        {{ stat.count }}
+        <span v-if="stat.bar" class="stat__bar" :style="{ height: `${stat.count + '%'}` }"> </span>
+      </span>
     </div>
   </div>
 </template>
@@ -48,42 +27,38 @@ defineProps<{
   align-items: center;
   flex-wrap: wrap;
   gap: var(--gap);
-  color: var(--color-text);
 
   &__tabs {
     gap: var(--gap);
+    color: var(--color-text);
     user-select: none;
   }
 
   &__count {
+    position: relative;
+    min-width: 32px;
+    text-align: center;
     background-color: var(--color-text-opacity-10);
-    padding: 0.125rem 0.375rem;
-    border-radius: 100%;
-    font-size: 0.5rem;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: var(--font-size-minor);
+    overflow: hidden;
   }
 
   &__label {
-    font-size: 0.8rem;
+    font-size: var(--font-size-minor);
     opacity: 0.9;
   }
 
-  &__value {
-    font-size: 1rem;
-  }
-
   &__bar {
-    height: 16px;
-    width: 16px;
-    background: var(--color-hover);
-    border-radius: 2px;
-    overflow: hidden;
-
-    &--fill {
-      width: 100%;
-      background: var(--color-background-soft);
-      border-radius: 2px;
-      transition: width 0.3s ease-in-out;
-    }
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary);
+    width: 32px;
+    opacity: 0.5;
+    border-radius: 3px 3px 8px 8px;
+    transition: height 0.3s ease-in-out;
   }
 }
 </style>

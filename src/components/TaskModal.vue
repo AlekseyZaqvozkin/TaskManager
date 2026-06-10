@@ -139,7 +139,6 @@ function submit(): void {
 /* Keyboard & focus management */
 const modal = ref<HTMLElement | null>(null)
 const firstInput = ref<HTMLInputElement | null>(null)
-const backdrop = ref<HTMLElement | null>(null)
 let lastFocused: HTMLElement | null = null
 
 watch(visible, async (v) => {
@@ -208,7 +207,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* остальной CSS без изменений */
 .modal-backdrop {
   position: fixed;
   inset: 0;

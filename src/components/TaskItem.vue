@@ -55,10 +55,10 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
       <span v-if="task.priority" class="item__priority">{{ task.priority }}</span>
     </div>
     <div class="item__buttons">
-      <button class="item__button-edit" @click="$emit('edit-task', task)" title="Редактировать">
+      <button class="btn tab" @click="$emit('edit-task', task)" title="Редактировать">
         Редактировать
       </button>
-      <button class="item__button-delete" @click="$emit('delete-task', task.id)" title="Удалить">
+      <button class="btn tab" @click="$emit('delete-task', task.id)" title="Удалить">
         Удалить
       </button>
     </div>
@@ -70,7 +70,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
   display: flex;
   gap: 8px;
   padding: 8px;
-  background-color: white;
+  background-color: var(--color-background-light);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
@@ -128,8 +128,8 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
   }
 
   &__title {
-    margin: 0 0 8px 0;
-    font-size: 1.1rem;
+    font-size: 16px;
+    font-weight: bold;
     color: #2d3748;
 
     &--completed {
@@ -140,7 +140,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
 
   &__description {
     margin: 0 0 0.5rem 0;
-    font-size: 0.8rem;
+    font-size: 14px;
     color: #718096;
   }
 
@@ -179,17 +179,9 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
     align-items: flex-start;
   }
 
-  &__edit,
-  &__delete {
-    padding: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: transform 0.2s;
-    &:hover {
-      transform: scale(1.1);
-    }
+  &__buttons{
+   display: flex;
+   gap: var(--gap);
   }
 }
 

@@ -4,9 +4,10 @@ import TaskList from './components/TaskList.vue'
 import TaskFilter from './components/TaskFilter.vue'
 import TaskStat from './components/TaskStat.vue'
 import TaskModal from './components/TaskModal.vue'
-import type { FilterOption, FilterValue, SortValue, Task } from './types/global'
+import type { FilterOption, FilterValue, SortValue, Stats, Task } from './types/global'
 
 import { useHead } from '@unhead/vue'
+// import ThemeChange from './components/ThemeChange.vue'
 
 useHead({
   title: 'Менеджер задач',
@@ -19,7 +20,6 @@ useHead({
       name: 'viewport',
       content: 'width=device-width, initial-scale=1',
     },
-    // Добавим Open Graph для красивого отображения в соцсетях
     {
       property: 'og:title',
       content: 'Менеджер задач',
@@ -45,6 +45,22 @@ watch(
   },
   { deep: true }, // изменения внутри объектов
 )
+
+// Реактивное состояние для отслеживания темы
+const isDark = ref(false)
+
+// Функция переключения темы
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+
+  if (isDark.value) {
+    document.documentElement.classList.add('dark-theme')
+    localStorage.setItem('theme', 'dark')
+  } else {
+    document.documentElement.classList.remove('dark-theme')
+    localStorage.setItem('theme', 'light')
+  }
+}
 
 // modal
 
@@ -94,10 +110,16 @@ const stats = computed(() => {
   const total = list.length
   const completed = list.reduce((s, t) => s + (t.completed ? 1 : 0), 0)
   const active = total - completed
-  const progress = total === 0 ? 0 : Math.round(100 - (completed / total) * 100)
+  const progress = total === 0 ? 0 : Math.round( (completed / total) * 100)
   return { total, completed, active, progress }
 })
 
+const statsArr = computed<Stats[]>(() => [
+  { label: 'Всего', count: stats.value.total },
+  { label: 'Выполнено', count: stats.value.completed },
+  { label: 'Активных', count: stats.value.total - stats.value.completed },
+  { label: 'Прогресс', count: stats.value.progress, bar: true },
+])
 // Фильтрация и сортировка
 const filterAndSortedTasks = computed(() => {
   let filtered = [...tasks.value]
@@ -171,6 +193,21 @@ const handleChangeFilter = (filter: FilterValue) => {
 }
 
 const loadFromLocalStorage = () => {
+  // Инициализация темы при монтировании компонента
+
+  const savedTheme = localStorage.getItem('theme')
+
+  // Проверяем сохраненную тему или системные настройки ОС
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    isDark.value = true
+    document.documentElement.classList.add('dark-theme')
+  } else {
+    isDark.value = false
+    document.documentElement.classList.remove('dark-theme')
+  }
+
   const savedTask = localStorage.getItem('tasks')
   if (savedTask) {
     try {
@@ -212,9 +249,11 @@ onMounted(() => {
         <div class="header__container">
           <img alt="Task manager logo" class="header__logo" src="@/assets/logo_green.png" />
           <button class="btn tab" @click="openNew">Новая задача</button>
-          <TaskStat :stats="stats" />
+          <TaskStat :stats="statsArr" />
           <button class="btn-alert tab" @click="eraseAll">Х</button>
         </div>
+        <!-- <ThemeChange/> -->
+        <button class="btn tab" @click="toggleTheme">{{ isDark ? 'светлая' : 'тёмная' }}</button>
       </section>
 
       <h1 class="app__title">Список задач</h1>
