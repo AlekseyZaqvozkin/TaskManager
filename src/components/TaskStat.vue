@@ -38,8 +38,8 @@ defineProps<{
     position: relative;
     min-width: 32px;
     text-align: center;
-    background-color: var(--color-text-opacity-10);
-    padding: 2px 6px;
+    background-color: var(--color-background-light);
+    padding: 3px 6px;
     border-radius: 8px;
     font-size: var(--font-size-minor);
     overflow: hidden;

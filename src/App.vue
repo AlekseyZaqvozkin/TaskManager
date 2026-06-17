@@ -250,10 +250,14 @@ onMounted(() => {
           <img alt="Task manager logo" class="header__logo" src="@/assets/logo_green.png" />
           <button class="btn tab" @click="openNew">Новая задача</button>
           <TaskStat :stats="statsArr" />
+          <div class="header__right">
+             <button class="btn tab" @click="toggleTheme">{{ isDark ? 'светлая' : 'тёмная' }}</button>
           <button class="btn-alert tab" @click="eraseAll">Х</button>
+          </div>
+
         </div>
         <!-- <ThemeChange/> -->
-        <button class="btn tab" @click="toggleTheme">{{ isDark ? 'светлая' : 'тёмная' }}</button>
+
       </section>
 
       <h1 class="app__title">Список задач</h1>
@@ -304,6 +308,9 @@ onMounted(() => {
   box-shadow: 0 1px 3px var(--color-shadow);
   border-radius: 12px;
   margin-bottom: var(--gap);
+  position: sticky;
+  top: 0;
+
   &__container {
     display: flex;
     align-items: center;
@@ -313,6 +320,11 @@ onMounted(() => {
   &__logo {
     width: 25px;
     height: 25px;
+  }
+
+  &__right {
+    display: flex;
+    gap: var(--gap);
   }
 }
 </style>

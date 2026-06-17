@@ -17,7 +17,7 @@
   --on-error: #000000;
   --black-30: rgba(0, 0, 0, 0.3);
 
-  --green: #42b883;
+  /* --green: #42b883; */
 
   --white-soft: #e2e8f0;
   --white-light: #f7fafc;
@@ -43,13 +43,11 @@
   --color-background-btn: var(--white);
 
   --color-border-btn: var(--white-soft);
-  --color-border: var(--green);
-  --color-hover: var(--green);
+  --color-border: var(--primary);
+  --color-hover: var(--primary);
 
   --color-text: var(--text-dark);
   --color-text-active: var(--white);
-  --color-text-opacity-30: var(--black-30);
-  --color-text-opacity-10: var(--black-10);
   --gap: 16px;
 }
 
