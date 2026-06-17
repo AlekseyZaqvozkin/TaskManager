@@ -29,7 +29,7 @@ const handleFilter = (e: string) => {
       <button
         v-for="filter in filterOption"
         :key="filter.label"
-        :class="['filter__tab', { 'filter__tab--active': activeFilter === filter.value }]"
+        :class="['filter__tab', 'tab', 'btn', { 'filter__tab--active': activeFilter === filter.value }]"
         @click="handleFilter(filter.value)"
       >
         {{ filter.label }}
@@ -40,7 +40,7 @@ const handleFilter = (e: string) => {
     </div>
 
     <div class="filter__sort">
-      <select v-model="sortBy" name="sortBy" @change="handleSort" class="filter__select tab btn">
+      <select v-model="sortBy" name="sortBy" @change="handleSort" class="filter__select tab">
         <option value="date">По дате</option>
         <option value="completedDate">Срок выполнения</option>
         <option value="title">По названию</option>
@@ -68,22 +68,9 @@ const handleFilter = (e: string) => {
   }
 
   &__tab {
-    padding: 8px 16px;
-    background: var(--color-background-btn);
-    border: 1px solid var(--color-border-btn);
-    border-radius: 8px;
     cursor: pointer;
-    transition:
-      color ease-in-out 0.2s,
-      border-color ease-in-out 0.2s;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
+
     gap: var(--gap);
-    &:hover {
-      border-color: var(--color-hover);
-      color: var(--color-hover);
-    }
 
     &--active {
       border-color: var(--color-hover);
@@ -91,16 +78,20 @@ const handleFilter = (e: string) => {
   }
 
   &__count {
-    background-color: var(--color-text-opacity-10);
+    background-color: var(--color-background-light);
     padding: 3px 6px;
     border-radius: 100%;
-    font-size: 12px;
+    font-size: var( --font-size-minor);
   }
 
   &__select {
     &:focus {
       outline: none;
     }
+    &:hover {
+  border-color: var(--color-hover);
+  // color: var(--color-hover);
+}
   }
 }
 </style>
