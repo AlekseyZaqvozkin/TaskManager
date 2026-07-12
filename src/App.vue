@@ -110,7 +110,7 @@ const stats = computed(() => {
   const total = list.length
   const completed = list.reduce((s, t) => s + (t.completed ? 1 : 0), 0)
   const active = total - completed
-  const progress = total === 0 ? 0 : Math.round( (completed / total) * 100)
+  const progress = total === 0 ? 0 : Math.round((completed / total) * 100)
   return { total, completed, active, progress }
 })
 
@@ -247,17 +247,19 @@ onMounted(() => {
     <div class="app__container">
       <section class="header">
         <div class="header__container">
-          <img alt="Task manager logo" class="header__logo" src="@/assets/logo_green.png" />
-          <button class="btn tab" @click="openNew">Новая задача</button>
+
+
+          <!-- <img alt="Task manager logo" class="header__logo" src="@/assets/logo_green.png" /> -->
+          <button class="header__btn btn tab" @click="openNew">Новая задача</button>
           <TaskStat :stats="statsArr" />
           <div class="header__right">
-             <button class="btn tab" @click="toggleTheme">{{ isDark ? 'светлая' : 'тёмная' }}</button>
-          <button class="btn-alert tab" @click="eraseAll">Х</button>
+            <button class="header__btn btn tab" @click="toggleTheme">
+              {{ isDark ? 'светлая' : 'тёмная' }}
+            </button>
+            <button class="btn-alert tab" @click="eraseAll">Х</button>
           </div>
-
         </div>
         <!-- <ThemeChange/> -->
-
       </section>
 
       <h1 class="app__title">Список задач</h1>
@@ -304,7 +306,7 @@ onMounted(() => {
 
 .header {
   padding: 8px 16px;
-  background: var(--color-background);
+  background: var(--color-background-light);
   box-shadow: 0 1px 3px var(--color-shadow);
   border-radius: 12px;
   margin-bottom: var(--gap);
@@ -320,6 +322,10 @@ onMounted(() => {
   &__logo {
     width: 25px;
     height: 25px;
+  }
+
+  &__btn {
+    color: var(--color-text);
   }
 
   &__right {

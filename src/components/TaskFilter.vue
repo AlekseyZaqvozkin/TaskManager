@@ -68,7 +68,7 @@ const handleFilter = (e: string) => {
   }
 
   &__tab {
-    cursor: pointer;
+    color: var(--color-text);
 
     gap: var(--gap);
 
@@ -85,6 +85,7 @@ const handleFilter = (e: string) => {
   }
 
   &__select {
+    color: var(--color-text);
     &:focus {
       outline: none;
     }
