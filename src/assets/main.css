@@ -17,19 +17,26 @@
 }
 
 .btn {
+   color: var(--color-text);
   cursor: pointer;
     transition:
       color ease-in-out 0.2s,
       border-color ease-in-out 0.2s;
 }
-
+.btn:focus-visible {
+  outline: none;
+}
 .btn:hover {
   border-color: var(--color-hover);
   color: var(--color-hover);
 }
 
 .btn-alert {
-  cursor: pointer;
+  color: var(--color-text);
+   cursor: pointer;
+    transition:
+      color ease-in-out 0.2s,
+      border-color ease-in-out 0.2s;
 }
 
 .btn-alert:hover {

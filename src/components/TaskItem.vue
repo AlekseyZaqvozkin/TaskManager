@@ -36,7 +36,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
         @change="$emit('toggle-task', task.id)"
         :id="`task-${task.id}`"
       />
-      <label :for="`task-${task.id}`" class="task-item--checkmark">o</label>
+      <label :for="`task-${task.id}`" class="task-item--checkmark">O</label>
     </div>
     <div class="item__content">
       <h3 class="item__title" :class="{ 'item__title--completed': task.completed }">
@@ -58,7 +58,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
       <button class="btn tab" @click="$emit('edit-task', task)" title="Редактировать">
         Редактировать
       </button>
-      <button class="btn tab" @click="$emit('delete-task', task.id)" title="Удалить">
+      <button class="btn-alert tab" @click="$emit('delete-task', task.id)" title="Удалить">
         Удалить
       </button>
     </div>
@@ -83,7 +83,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
 
   &--completed {
     opacity: 0.7;
-    background-color: #f9fafb;
+    background-color: var(--color-background-light);
   }
   &__checkmark {
     display: inline-block;
@@ -130,11 +130,11 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
   &__title {
     font-size: 16px;
     font-weight: bold;
-    color: #2d3748;
+    color: var(--color-text);
 
     &--completed {
       text-decoration: line-through;
-      color: #a0aec0;
+      color: var(--color-shadow);
     }
   }
 
@@ -180,6 +180,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
   }
 
   &__buttons{
+
    display: flex;
    gap: var(--gap);
   }
