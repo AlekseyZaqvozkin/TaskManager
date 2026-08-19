@@ -30,9 +30,13 @@
 
   --black-10: rgba(0, 0, 0, 0.1);
 
-  --font-size-header: 16px;
+  --font-size-header: 22px;
   --font-size-text: 14px;
   --font-size-minor: 12px;
+
+  --border-radius: 16px;
+  --border-radius-small: 6px;
+  --gap: 16px;
 }
 
 /* semantic color variables for this project */
@@ -51,7 +55,7 @@
 
   --color-text: var(--text-dark);
   --color-text-active: var(--white);
-  --gap: 16px;
+  
 }
 
 :root.dark-theme {

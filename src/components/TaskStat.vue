@@ -40,7 +40,7 @@ defineProps<{
     text-align: center;
     background-color: var(--color-background-light);
     padding: 3px 6px;
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
     font-size: var(--font-size-minor);
     overflow: hidden;
   }

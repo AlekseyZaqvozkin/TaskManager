@@ -38,7 +38,6 @@ const handleFilter = (e: string) => {
         </span>
       </button>
     </div>
-
     <div class="filter__sort">
       <select v-model="sortBy" name="sortBy" @change="handleSort" class="filter__select tab">
         <option value="date">По дате</option>
@@ -58,7 +57,7 @@ const handleFilter = (e: string) => {
   flex-wrap: wrap;
   padding: var(--gap);
   background: var(--color-background-light);
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   margin-bottom: var(--gap);
 
   &__tabs {
