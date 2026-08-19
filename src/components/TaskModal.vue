@@ -3,41 +3,103 @@
     <div v-if="visible" class="modal-backdrop" @click.self="close" ref="backdrop">
       <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" ref="modal">
         <header class="modal__header">
-          <h3 id="modal-title">{{ isEdit ? 'Редактировать задачу' : 'Новая задача' }}</h3>
-          <button class="close-btn" @click="close">✕</button>
+          <h3 class="modal__title" id="modal-title">
+            {{ isEdit ? 'Редактировать задачу' : 'Новая задача' }}
+          </h3>
         </header>
 
-        <form @submit.prevent="submit" class="modal__body" @keydown.enter.prevent="onEnterKey">
-          <label>
-            <span>Заголовок</span>
-            <input ref="firstInput" v-model="form.title" required maxlength="100" />
+        <form @submit.prevent="submit" class="modal__form" @keydown.enter.prevent="onEnterKey">
+          <label class="modal__label">
+            <span class="modal__heading">Задача</span>
+            <input
+              class="modal__input"
+              name="title"
+              ref="firstInput"
+              v-model="form.title"
+              required
+              maxlength="100"
+            />
           </label>
 
-          <label>
-            <span>Описание</span>
-            <textarea v-model="form.description" rows="4"></textarea>
+          <label class="modal__label">
+            <span class="modal__heading">Описание</span>
+            <textarea
+              class="modal__input"
+              name="description"
+              v-model="form.description"
+              rows="4"
+            ></textarea>
           </label>
 
-          <label>
+          <!-- <label class="modal__label">
             <span>Приоритет</span>
-            <select v-model="form.priority">
+
+
+            <select v-model="form.priority" name="priority">
               <option value="low">Низкий</option>
               <option value="medium">Средний</option>
               <option value="high">Высокий</option>
             </select>
-          </label>
+          </label> -->
 
-          <label>
-            <span>Срок</span>
-            <input type="date" v-model="form.completedDate" />
+          <div class="modal__select">
+            <label for="priority" class="modal__label"> <span class="modal__heading">Приоритет</span> </label>
+
+            <div>
+              <input
+                class="modal__select-toggle"
+                v-model="form.priority"
+                id="priority-low"
+                type="radio"
+                name="priority"
+                value="low"
+
+              />
+              <label class="btn tab modal__select-btn" for="priority-low" :class="{' modal__select-btn--isActive' : form.priority == 'low'}">
+                 Низкий</label>
+            </div>
+            <div>
+              <input
+                class="modal__select-toggle"
+                v-model="form.priority"
+                id="priority-medium"
+                type="radio"
+                name="priority"
+                value="medium"
+
+              />
+              <label class="btn tab  modal__select-btn" for="priority-medium"
+              :class="{' modal__select-btn--isActive' : form.priority == 'medium'}">
+              Средний</label>
+            </div>
+            <div>
+              <input
+                class="modal__select-toggle"
+                v-model="form.priority"
+                id="priority-high"
+                type="radio"
+                name="priority"
+                value="high"
+
+              />
+              <label class="btn tab  modal__select-btn" for="priority-high" :class="{' modal__select-btn--isActive' : form.priority == 'high'}">
+                Высокий</label>
+            </div>
+            <!-- </fieldset> -->
+          </div>
+
+          <label class="modal__label">
+            <span class="modal__heading">Срок</span>
+            <input class="modal__select-date" type="date" v-model="form.completedDate" name="completedDate" />
           </label>
 
           <div class="modal__actions">
-            <button type="button" @click="close">Отмена</button>
-            <button type="submit">{{ isEdit ? 'Сохранить' : 'Создать' }}</button>
+            <button class="btn tab" type="button" @click="close">Отмена</button>
+            <button class="btn tab" type="submit">{{ isEdit ? 'Сохранить' : 'Создать' }}</button>
             <!-- <button v-if="isEdit" type="button" class="danger" @click="remove">Удалить</button> -->
           </div>
         </form>
+        <button class="modal__close-btn" @click="close">Х</button>
       </div>
     </div>
   </transition>
@@ -206,7 +268,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -215,53 +277,167 @@ onBeforeUnmount(() => {
   justify-content: center;
   background: rgba(0, 0, 0, 0.45);
   z-index: 50;
+  backdrop-filter: blur(1px);
 }
 .modal {
-  background: #fff;
-  width: 420px;
+  position: relative;
+  background-color: var(--color-background-soft);
+  border-radius: var(--border-radius);
+  padding: var(--gap);
+  width: 450px;
   max-width: 95%;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   outline: none;
+
+  &__close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    color: var(--color-text);
+    border: none;
+    background: none;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 16px;
+  }
+
+  &__title {
+    color: var(--color-text);
+    font-size: var(--font-size-header);
+  }
+
+  &__heading  {
+    // font-weight: bold;
+  }
+
+  &__form {
+    padding: var(--gap);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    font-size: var(--font-size-text);
+  }
+
+  &__select {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    &-toggle {
+      display: none;
+
+    }
+
+    &-btn {
+      opacity: 0.5;
+      &--isActive {
+        opacity: 1;
+      }
+    }
+
+    &-date {
+      padding: 8px 16px;
+      font-size: inherit;
+      font-family: inherit;
+      outline: none;
+      border: none;
+      border-radius: var(--border-radius-small);
+    }
+
+    &-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s;
+      &:hover {
+        border-color: #999;
+      }
+    }
+    // &-arrow {
+    //   border: solid #666;
+    //   border-width: 0 2px 2px 0;
+    //   display: inline-block;
+    //   transform: rotate(45deg);
+    //   transition: transform 0.2s;
+    // }
+    &-option {
+      display: flex;
+      justify-content: space-between;
+      // position: absolute;
+      // top: 100%;
+      // left: 0;
+      // right: 0;
+      // margin: 4px 0 0 0;
+      // padding: 0;
+      // list-style: none;
+      // background-color: rgba(0, 0, 0, 0.45);
+      // border: 2px solid #666;
+      // box-shadow: rgba(0, 0, 0, 0.45);
+      // opacity: 0;
+      // visibility: hidden;
+      // transform: translateY(-10px);
+      // transition:
+      //   opacity 0.2s,
+      //   transform 0.2s,
+      //   visibility 0.2s;
+      // z-index: 10;
+      & li label {
+        display: block;
+        padding: 12px;
+        cursor: pointer;
+        &:hover {
+          background-color: #f0f6ff;
+          color: #0066ff;
+        }
+      }
+    }
+  }
+
+  &__label {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__input {
+    width: 77%;
+    padding: var(--gap);
+    outline: none;
+    border: none;
+    border-radius: var(--border-radius-small);
+    font-family: inherit;
+    font-size: var(--font-size-text);
+
+    &:focus {
+      box-shadow: 0 3px 3px var(--color-shadow);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--gap);
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
 }
-.modal__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid #eee;
-}
-.modal__body {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.modal__actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  margin-top: 8px;
-}
+
 .close-btn {
   background: none;
   border: none;
   font-size: 16px;
   cursor: pointer;
 }
-button.danger {
-  background: #ef4444;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.18s;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

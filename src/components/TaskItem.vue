@@ -71,7 +71,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
   gap: 8px;
   padding: 8px;
   background-color: var(--color-background-light);
-  border-radius: 8px;
+  border-radius: var(--border-radius-small);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
   animation: slideIn 0.3s ease;
@@ -91,7 +91,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
     height: 24px;
     background-color: #fff;
     border: 2px solid #cbd5e0;
-    border-radius: 6px;
+    border-radius: var(--border-radius-small);
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -153,7 +153,7 @@ const formatDate = (dateString: string | number | Date, withTime: boolean) => {
 
   &__priority {
     padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--border-radius-small);
     font-size: 0.75rem;
     font-weight: 600;
 

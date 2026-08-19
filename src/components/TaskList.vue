@@ -37,7 +37,7 @@ const emits = defineEmits<{
     text-align: center;
     padding: 32px;
     background: var(--color-background-light);
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     color: var(--color-text);
   }
 
