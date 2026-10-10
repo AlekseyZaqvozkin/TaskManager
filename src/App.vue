@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import TaskList from './components/TaskList.vue'
 import TaskFilter from './components/TaskFilter.vue'
 import TaskStat from './components/TaskStat.vue'
 import TaskModal from './components/TaskModal.vue'
-import type { FilterOption, FilterValue, SortValue, Stats, Task } from './types/global'
+import type {  Task } from './types/global'
 
 import { useHead } from '@unhead/vue'
+
+import { useTaskStore } from '@/stores/taskStore'
+
+const tasks = useTaskStore()
 // import ThemeChange from './components/ThemeChange.vue'
 
 useHead({
@@ -32,10 +36,10 @@ useHead({
   link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
 })
 
-// Состояние
-const tasks = ref<Task[]>([])
-const currentFilter = ref<FilterValue>('all')
-const currentSort = ref<SortValue>('date')
+// + Состояние
+// const tasks = ref<Task[]>([])
+// const currentFilter = ref<FilterValue>('all')
+// const currentSort = ref<SortValue>('date')
 
 // Следим за списком задач
 watch(
@@ -77,120 +81,120 @@ function openEdit(task: Task) {
   modalOpen.value = true
 }
 
-function onSave(taskData: Task) {
-  if (taskData.id) {
-    const i = tasks.value.findIndex((x) => x.id === taskData.id)
-    if (i !== -1) {
-      // Обновляем существующую задачу
-      tasks.value[i] = { ...tasks.value[i], ...taskData }
-    }
-  } else {
-    // Добавляем новую с генерацией ID
-    if (!taskData.completedDate) {
-      taskData.completedDate = ''
-    }
-    tasks.value.push({
-      ...taskData,
-      id: Date.now(),
-      createdAt: new Date().toISOString(),
-    })
-  }
-}
+// function onSave(taskData: Task) {
+//   if (taskData.id) {
+//     const i = tasks.value.findIndex((x) => x.id === taskData.id)
+//     if (i !== -1) {
+//       // Обновляем существующую задачу
+//       tasks.value[i] = { ...tasks.value[i], ...taskData }
+//     }
+//   } else {
+//     // Добавляем новую с генерацией ID
+//     if (!taskData.completedDate) {
+//       taskData.completedDate = ''
+//     }
+//     tasks.value.push({
+//       ...taskData,
+//       id: Date.now(),
+//       createdAt: new Date().toISOString(),
+//     })
+//   }
+// }
 
 // Фильтр
-const filterOption = computed<FilterOption[]>(() => [
-  { label: 'Все', value: 'all', count: tasks.value.length },
-  { label: 'В работе', value: 'active', count: tasks.value.filter((t) => !t.completed).length },
-  { label: 'Выполненые', value: 'completed', count: tasks.value.filter((t) => t.completed).length },
-])
+// const filterOption = computed<FilterOption[]>(() => [
+//   { label: 'Все', value: 'all', count: tasks.value.length },
+//   { label: 'В работе', value: 'active', count: tasks.value.filter((t) => !t.completed).length },
+//   { label: 'Выполненые', value: 'completed', count: tasks.value.filter((t) => t.completed).length },
+// ])
 
-// Статистика
-const stats = computed(() => {
-  const list = tasks.value
-  const total = list.length
-  const completed = list.reduce((s, t) => s + (t.completed ? 1 : 0), 0)
-  const active = total - completed
-  const progress = total === 0 ? 0 : Math.round((completed / total) * 100)
-  return { total, completed, active, progress }
-})
+// // Статистика
+// const stats = computed(() => {
+//   const list = tasks.value
+//   const total = list.length
+//   const completed = list.reduce((s, t) => s + (t.completed ? 1 : 0), 0)
+//   const active = total - completed
+//   const progress = total === 0 ? 0 : Math.round((completed / total) * 100)
+//   return { total, completed, active, progress }
+// })
 
-const statsArr = computed<Stats[]>(() => [
-  { label: 'Всего', count: stats.value.total },
-  { label: 'Выполнено', count: stats.value.completed },
-  { label: 'Активных', count: stats.value.total - stats.value.completed },
-  { label: 'Прогресс', count: stats.value.progress, bar: true },
-])
-// Фильтрация и сортировка
-const filterAndSortedTasks = computed(() => {
-  let filtered = [...tasks.value]
+// const statsArr = computed<Stats[]>(() => [
+//   { label: 'Всего', count: stats.value.total },
+//   { label: 'Выполнено', count: stats.value.completed },
+//   { label: 'Активных', count: stats.value.total - stats.value.completed },
+//   { label: 'Прогресс', count: stats.value.progress, bar: true },
+// ])
+// // Фильтрация и сортировка
+// const filterAndSortedTasks = computed(() => {
+//   let filtered = [...tasks.value]
 
-  // 1. Фильтрация
-  if (currentFilter.value === 'active') {
-    filtered = filtered.filter((t) => !t.completed)
-  } else if (currentFilter.value === 'completed') {
-    filtered = filtered.filter((t) => t.completed)
-  }
+//   // 1. Фильтрация
+//   if (currentFilter.value === 'active') {
+//     filtered = filtered.filter((t) => !t.completed)
+//   } else if (currentFilter.value === 'completed') {
+//     filtered = filtered.filter((t) => t.completed)
+//   }
 
-  // 2. Сортировка
-  filtered.sort((a, b) => {
-    // Сортировка по названию
-    if (currentSort.value === 'title') {
-      return a.title.localeCompare(b.title)
-    }
+//   // 2. Сортировка
+//   filtered.sort((a, b) => {
+//     // Сортировка по названию
+//     if (currentSort.value === 'title') {
+//       return a.title.localeCompare(b.title)
+//     }
 
-    // Сортировка по приоритету
-    if (currentSort.value === 'priority') {
-      const priorityOrder: Record<Task['priority'], number> = { high: 3, medium: 2, low: 1 }
-      return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0)
-    }
+//     // Сортировка по приоритету
+//     if (currentSort.value === 'priority') {
+//       const priorityOrder: Record<Task['priority'], number> = { high: 3, medium: 2, low: 1 }
+//       return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0)
+//     }
 
-    // Сортировка по дате завершения (возрастание)
-    if (currentSort.value === 'completedDate') {
-      const dateA = a.completedDate ? new Date(a.completedDate).getTime() : null
-      const dateB = b.completedDate ? new Date(b.completedDate).getTime() : null
+//     // Сортировка по дате завершения (возрастание)
+//     if (currentSort.value === 'completedDate') {
+//       const dateA = a.completedDate ? new Date(a.completedDate).getTime() : null
+//       const dateB = b.completedDate ? new Date(b.completedDate).getTime() : null
 
-      if (dateA === dateB) return 0
-      if (dateA === null) return 1
-      if (dateB === null) return -1
+//       if (dateA === dateB) return 0
+//       if (dateA === null) return 1
+//       if (dateB === null) return -1
 
-      return dateA - dateB
-    }
+//       return dateA - dateB
+//     }
 
-    // По умолчанию (дата создания, убывание)
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  })
+//     // По умолчанию (дата создания, убывание)
+//     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+//   })
 
-  return filtered
-})
+//   return filtered
+// })
 
 // Методы
 
-const toggleTask = (id: number) => {
-  const task = tasks.value.find((t) => t.id === id)
-  if (task) {
-    task.completed = !task.completed
-  }
-}
+// const toggleTask = (id: number) => {
+//   const task = tasks.value.find((t) => t.id === id)
+//   if (task) {
+//     task.completed = !task.completed
+//   }
+// }
 
-const eraseAll = () => {
-  tasks.value = []
-  currentFilter.value = 'all'
-  currentSort.value = 'date'
-  localStorage.clear()
-}
+// const eraseAll = () => {
+//   tasks.value = []
+//   currentFilter.value = 'all'
+//   currentSort.value = 'date'
+//   localStorage.clear()
+// }
 
-const deleteTask = (id: number) => {
-  tasks.value = tasks.value.filter((t) => t.id !== id)
-  // saveToLocalStorage()
-}
+// const deleteTask = (id: number) => {
+//   tasks.value = tasks.value.filter((t) => t.id !== id)
+//   // saveToLocalStorage()
+// }
 
-const handleSortChange = (sort: SortValue) => {
-  currentSort.value = sort
-}
+// const handleSortChange = (sort: SortValue) => {
+//   currentSort.value = sort
+// }
 
-const handleChangeFilter = (filter: FilterValue) => {
-  currentFilter.value = filter
-}
+// const handleFilterChange = (filter: FilterValue) => {
+//   currentFilter.value = filter
+// }
 
 const loadFromLocalStorage = () => {
   // Инициализация темы при монтировании компонента
@@ -208,32 +212,32 @@ const loadFromLocalStorage = () => {
     document.documentElement.classList.remove('dark-theme')
   }
 
-  const savedTask = localStorage.getItem('tasks')
-  if (savedTask) {
-    try {
-      const parsed: unknown = JSON.parse(savedTask)
-      if (Array.isArray(parsed)) {
-        tasks.value = parsed.map((p) => {
-          const obj = p as Record<string, unknown>
-          return {
-            id: Number(obj.id),
-            title: String(obj.title ?? ''),
-            description: typeof obj.description === 'string' ? obj.description : '',
-            completed: Boolean(obj.completed),
-            priority: (['low', 'medium', 'high'].includes(String(obj.priority))
-              ? (String(obj.priority) as Task['priority'])
-              : 'medium') as Task['priority'],
-            createdAt: String(obj.createdAt ?? new Date().toISOString()),
-            completedDate: String(obj.completedDate ?? new Date().toISOString()),
-          } as Task
-        })
-      } else {
-        tasks.value = []
-      }
-    } catch {
-      tasks.value = []
-    }
-  }
+  // const savedTask = localStorage.getItem('tasks')
+  // if (savedTask) {
+  //   try {
+  //     const parsed: unknown = JSON.parse(savedTask)
+  //     if (Array.isArray(parsed)) {
+  //       tasks.value = parsed.map((p) => {
+  //         const obj = p as Record<string, unknown>
+  //         return {
+  //           id: Number(obj.id),
+  //           title: String(obj.title ?? ''),
+  //           description: typeof obj.description === 'string' ? obj.description : '',
+  //           completed: Boolean(obj.completed),
+  //           priority: (['low', 'medium', 'high'].includes(String(obj.priority))
+  //             ? (String(obj.priority) as Task['priority'])
+  //             : 'medium') as Task['priority'],
+  //           createdAt: String(obj.createdAt ?? new Date().toISOString()),
+  //           completedDate: String(obj.completedDate ?? new Date().toISOString()),
+  //         } as Task
+  //       })
+  //     } else {
+  //       tasks.value = []
+  //     }
+  //   } catch {
+  //     tasks.value = []
+  //   }
+  // }
 }
 
 // Загрузка при старте
@@ -251,12 +255,12 @@ onMounted(() => {
 
           <!-- <img alt="Task manager logo" class="header__logo" src="@/assets/logo_green.png" /> -->
           <button class="header__btn btn tab" @click="openNew">Новая задача</button>
-          <TaskStat :stats="statsArr" />
+          <TaskStat :stats="tasks.statsArr" />
           <div class="header__right">
             <button class="header__btn btn tab" @click="toggleTheme">
               {{ isDark ? 'светлая' : 'тёмная' }}
             </button>
-            <button class="btn-alert tab" @click="eraseAll">Х</button>
+            <button class="btn-alert tab" @click="tasks.eraseAll">Х</button>
           </div>
         </div>
         <!-- <ThemeChange/> -->
@@ -264,20 +268,20 @@ onMounted(() => {
 
       <h1 class="app__title">Список задач</h1>
       <TaskFilter
-        :filter-option="filterOption"
-        :active-filter="currentFilter"
-        @sort-change="handleSortChange"
-        @current-filter="handleChangeFilter"
+        :filter-option="tasks.filterOption"
+        :active-filter="tasks.currentFilter"
+        @sort-change="tasks.handleSortChange"
+        @current-filter="tasks.handleFilterChange"
       />
       <TaskList
-        :tasks="filterAndSortedTasks"
-        @toggle-task="toggleTask"
-        @delete-task="deleteTask"
+        :tasks="tasks.filterAndSortedTasks"
+        @toggle-task="tasks.toggleTask"
+        @delete-task="tasks.deleteTask"
         @edit-task="openEdit"
       />
     </div>
   </div>
-  <TaskModal v-model="modalOpen" :task="editingTask" @save="onSave" />
+  <TaskModal v-model="modalOpen" :task="editingTask" @save="tasks.onSave" />
 </template>
 
 <style scoped lang="scss">
