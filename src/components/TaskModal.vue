@@ -310,10 +310,6 @@ onBeforeUnmount(() => {
     font-size: var(--font-size-header);
   }
 
-  &__heading  {
-    // font-weight: bold;
-  }
-
   &__form {
     padding: var(--gap);
     display: flex;
